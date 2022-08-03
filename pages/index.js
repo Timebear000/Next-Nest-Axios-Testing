@@ -1,8 +1,13 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import axios from "axios";
+import Head from "next/head";
+import Image from "next/image";
+import { useEffect } from "react";
+import styles from "../styles/Home.module.css";
 
-export default function Home() {
+export default function Home({ portfolio }) {
+  useEffect(() => {
+    console.log(portfolio.result, "data");
+  }, []);
   return (
     <div className={styles.container}>
       <Head>
@@ -17,8 +22,7 @@ export default function Home() {
         </h1>
 
         <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
+          Get started by editing <code className={styles.code}>pages/index.js</code>
         </p>
 
         <div className={styles.grid}>
@@ -32,10 +36,7 @@ export default function Home() {
             <p>Learn about Next.js in an interactive course with quizzes!</p>
           </a>
 
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
+          <a href="https://github.com/vercel/next.js/tree/canary/examples" className={styles.card}>
             <h2>Examples &rarr;</h2>
             <p>Discover and deploy boilerplate example Next.js projects.</p>
           </a>
@@ -45,9 +46,7 @@ export default function Home() {
             className={styles.card}
           >
             <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
+            <p>Instantly deploy your Next.js site to a public URL with Vercel.</p>
           </a>
         </div>
       </main>
@@ -58,12 +57,21 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by{" "}
           <span className={styles.logo}>
             <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
           </span>
         </a>
       </footer>
     </div>
-  )
+  );
+}
+// http://3.34.188.17:2000/api/v1/portfolio/user/62e8a666b0fc35a1d90486ee
+export async function getServerSideProps(context) {
+  const { data } = await axios.get("http://3.34.188.17:2000/api/v1/portfolio/user/62e8a666b0fc35a1d90486ee");
+  return {
+    props: {
+      portfolio: data,
+    }, // will be passed to the page component as props
+  };
 }
